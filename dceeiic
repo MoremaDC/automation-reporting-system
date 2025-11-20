@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Reporting System</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background-color: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .tab.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: var(--light-color);
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            padding: 25px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        select, input, textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #219955;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        
+        .btn-danger {
+            background-color: var(--accent-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--light-color);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .report-section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+        
+        .report-section h3 {
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .stat-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .report-controls {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .report-controls .form-row {
+            align-items: end;
+        }
+        
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                background-color: white;
+            }
+            
+            .tab-content {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>Automation Reporting System</h1>
+                    <div class="subtitle">Economic Activation Directorate</div>
+                </div>
+                <div id="current-date"></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="nav-tabs no-print">
+            <div class="tab active" data-tab="data-entry">Data Entry</div>
+            <div class="tab" data-tab="view-reports">View Reports</div>
+            <div class="tab" data-tab="generate-reports">Generate Reports</div>
+            <div class="tab" data-tab="generated-reports">Generated Reports</div>
+        </div>
+
+        <!-- Data Entry Tab -->
+        <div id="data-entry" class="tab-content active">
+            <h2>Activity Data Entry</h2>
+            <div id="alert-container"></div>
+            
+            <form id="report-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reporting-month">Reporting Month:</label>
+                        <select id="reporting-month" required>
+                            <option value="">-- Select Month --</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reporting-quarter">Reporting Quarter:</label>
+                        <select id="reporting-quarter" required>
+                            <option value="">-- Select Quarter --</option>
+                            <option value="Quarter 1">Quarter 1</option>
+                            <option value="Quarter 2">Quarter 2</option>
+                            <option value="Quarter 3">Quarter 3</option>
+                            <option value="Quarter 4">Quarter 4</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="unit">Select Unit:</label>
+                    <select id="unit" required>
+                        <option value="">-- Select Unit --</option>
+                        <option value="Community Engagement">Community Engagement</option>
+                        <option value="UCfERI">UCfERI</option>
+                        <option value="Economic Activation Office">Economic Activation Office</option>
+                        <option value="Commercialistion TTO">Commercialistion TTO</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="project">Select Project:</label>
+                    <select id="project" required>
+                        <option value="">-- Select Project --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sub-project">Select Sub-Project:</label>
+                    <select id="sub-project" required>
+                        <option value="">-- Select Sub-Project --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="activity">Activity Description:</label>
+                    <textarea id="activity" placeholder="Describe the activity in detail..." required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="participants">Number of Participants:</label>
+                        <input type="number" id="participants" min="0" placeholder="Enter number of participants">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cost">Cost (ZAR):</label>
+                        <input type="number" id="cost" min="0" step="0.01" placeholder="Enter cost in ZAR">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="impact">Impact/Output:</label>
+                    <textarea id="impact" placeholder="Describe the impact or output of this activity..." required></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn btn-success">Save Report</button>
+                    <button type="button" class="btn btn-warning" id="clear-form">Clear Form</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- View Reports Tab -->
+        <div id="view-reports" class="tab-content">
+            <h2>View All Reports</h2>
+            <div class="button-group no-print">
+                <button class="btn" id="refresh-reports">Refresh Reports</button>
+                <button class="btn btn-danger" id="clear-all-reports">Clear All Reports</button>
+            </div>
+            
+            <div id="reports-table-container">
+                <table id="reports-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Month</th>
+                            <th>Quarter</th>
+                            <th>Unit</th>
+                            <th>Project</th>
+                            <th>Sub-Project</th>
+                            <th>Activity</th>
+                            <th>Participants</th>
+                            <th>Cost (ZAR)</th>
+                            <th class="no-print">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reports-body">
+                        <!-- Reports will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="no-reports-message" class="hidden">
+                <div class="alert alert-error">
+                    No reports found. Please add some reports in the Data Entry tab.
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Reports Tab -->
+        <div id="generate-reports" class="tab-content">
+            <h2>Generate Narrative Reports</h2>
+            
+            <div class="report-controls">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="report-type">Report Type:</label>
+                        <select id="report-type">
+                            <option value="monthly-unit">Monthly Unit Report</option>
+                            <option value="quarterly-unit">Quarterly Unit Report</option>
+                            <option value="monthly-directorate">Monthly Directorate Report</option>
+                            <option value="quarterly-directorate">Quarterly Directorate Report</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="unit-selection">
+                        <label for="selected-unit">Select Unit:</label>
+                        <select id="selected-unit">
+                            <option value="Community Engagement">Community Engagement</option>
+                            <option value="UCfERI">UCfERI</option>
+                            <option value="Economic Activation Office">Economic Activation Office</option>
+                            <option value="Commercialistion TTO">Commercialistion TTO</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="period-selection">
+                        <label for="selected-period">Select Period:</label>
+                        <select id="selected-period">
+                            <!-- Options will be populated based on report type -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-success" id="generate-report">Generate Report</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="report-preview">
+                <!-- Report preview will be shown here -->
+            </div>
+        </div>
+
+        <!-- Generated Reports Tab -->
+        <div id="generated-reports" class="tab-content">
+            <h2>Generated Reports</h2>
+            
+            <div id="unit-reports-container">
+                <!-- Unit reports will be generated here -->
+            </div>
+            
+            <div id="directorate-report-container">
+                <!-- Directorate report will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data structures
+        const units = [
+            "Community Engagement",
+            "UCfERI", 
+            "Economic Activation Office",
+            "Commercialistion TTO"
+        ];
+        
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        
+        const quarters = ["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"];
+        
+        const projects = {
+            "Community Engagement": [
+                "Workshop",
+                "Outreach",
+                "Partnership",
+                "Student Project"
+            ],
+            "Economic Activation Office": [
+                "Student Led Programs",
+                "Entrepreneurship Ecosystem Development and Management",
+                "Events", 
+                "Entrepreneurial Capacity Building and Training",
+                "Stakeholder Engagement and Sustainability",
+                "Entrepreneurial Research and Inclusive Innovation",
+                "Student Entrepreneurship Community and Advisory"
+            ]
+        };
+        
+        const subProjects = {
+            "Workshop": [
+                "Entrepreneurship Skills Workshop Series",
+                "Community Health & Wellness Workshops",
+                "Environmental Sustainability Workshops"
+            ],
+            "Outreach": [
+                "High School Empowerment Outreach",
+                "Rural Community Technology Outreach",
+                "Agriculture & Food Security Outreach"
+            ],
+            "Partnership": [
+                "NGO Collaboration Program",
+                "Industry & Business Partnerships",
+                "Government & Municipality Engagement"
+            ],
+            "Student Project": [
+                "Service-Learning Community Projects",
+                "Innovation Challenge Projects",
+                "Campus Volunteer Program"
+            ],
+            "Student Led Programs": [
+                "SWEEP", "Sustainable Beekeeping", "Entrepreneurship Student Ambassadors Program (ESAP)",
+                "Skills for the Future Program (SFFP)", "Biodiversity and IKSAP", "Millenium Fellowship",
+                "Stop the spot youth Organization", "Map The System", "USSAVI", "Enactus"
+            ],
+            "Entrepreneurship Ecosystem Development and Management": [
+                "Annual UNIVEN Entrepreneurship & Innovation Festival",
+                "Entrepreneurship Day"
+            ],
+            "Events": [
+                "UNIVEN Entrepreneurship Portal & Digital Hub",
+                "Accelerator Programme"
+            ],
+            "Entrepreneurial Capacity Building and Training": [
+                "Student Entrepreneurship Training Bootcamp Series",
+                "Entrepreneurship Educators Capacity Programme (EECAP)",
+                "Digital Entrepreneurship Skills Programme (DESP)",
+                "Certified Entrepreneurship Curriculum Integration Project", 
+                "Sustainability & Green Business Training Workshops"
+            ],
+            "Stakeholder Engagement and Sustainability": [
+                "UNIVEN Industry Partnership Forum",
+                "International Entrepreneurship Exchange Programme",
+                "Community and Municipal Entrepreneurship Partnership (CMEP)",
+                "Funding & Partnership Development Drive"
+            ],
+            "Entrepreneurial Research and Inclusive Innovation": [
+                "UNIVEN Innovation Challenge",
+                "Entrepreneurial Data & Research Hub"
+            ],
+            "Student Entrepreneurship Community and Advisory": [
+                "UNIVEN Entrepreneurship Advisory Clinic (UEAC)",
+                "Student Entrepreneurship Leadership Council (SELC)",
+                "Community Entrepreneurship Roadshow (CER)",
+                "Secondary Schools Entrepreneurship Pipeline Programme",
+                "Women and Youth Enterprise Empowerment Project (WYEEP)"
+            ]
+        };
+
+        // Application state
+        let reports = JSON.parse(localStorage.getItem('automationReports')) || [];
+        let currentGeneratedReports = {
+            unitReports: [],
+            directorateReport: null
+        };
+        
+        // DOM Elements
+        const currentDateEl = document.getElementById('current-date');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const reportingMonthSelect = document.getElementById('reporting-month');
+        const reportingQuarterSelect = document.getElementById('reporting-quarter');
+        const unitSelect = document.getElementById('unit');
+        const projectSelect = document.getElementById('project');
+        const subProjectSelect = document.getElementById('sub-project');
+        const reportForm = document.getElementById('report-form');
+        const clearFormBtn = document.getElementById('clear-form');
+        const refreshReportsBtn = document.getElementById('refresh-reports');
+        const clearAllReportsBtn = document.getElementById('clear-all-reports');
+        const reportsBody = document.getElementById('reports-body');
+        const noReportsMessage = document.getElementById('no-reports-message');
+        const reportTypeSelect = document.getElementById('report-type');
+        const unitSelectionDiv = document.getElementById('unit-selection');
+        const selectedUnitSelect = document.getElementById('selected-unit');
+        const periodSelectionDiv = document.getElementById('period-selection');
+        const selectedPeriodSelect = document.getElementById('selected-period');
+        const generateReportBtn = document.getElementById('generate-report');
+        const reportPreview = document.getElementById('report-preview');
+        const unitReportsContainer = document.getElementById('unit-reports-container');
+        const directorateReportContainer = document.getElementById('directorate-report-container');
+        const alertContainer = document.getElementById('alert-container');
+
+        // Initialize the application
+        function init() {
+            // Set current date
+            currentDateEl.textContent = new Date().toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Set current month and quarter as default
+            const currentMonth = new Date().toLocaleString('en-US', { month: 'long' });
+            reportingMonthSelect.value = currentMonth;
+            
+            const currentMonthNum = new Date().getMonth();
+            const currentQuarter = Math.floor(currentMonthNum / 3) + 1;
+            reportingQuarterSelect.value = `Quarter ${currentQuarter}`;
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Load reports table
+            loadReportsTable();
+            
+            // Initialize report type selection
+            handleReportTypeChange();
+        }
+        
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Tab navigation
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    activateTab(tabId);
+                });
+            });
+            
+            // Unit selection change
+            unitSelect.addEventListener('change', handleUnitChange);
+            
+            // Project selection change
+            projectSelect.addEventListener('change', handleProjectChange);
+            
+            // Form submission
+            reportForm.addEventListener('submit', handleFormSubmit);
+            
+            // Clear form button
+            clearFormBtn.addEventListener('click', clearForm);
+            
+            // Refresh reports button
+            refreshReportsBtn.addEventListener('click', loadReportsTable);
+            
+            // Clear all reports button
+            clearAllReportsBtn.addEventListener('click', clearAllReports);
+            
+            // Report type change
+            reportTypeSelect.addEventListener('change', handleReportTypeChange);
+            
+            // Generate report button
+            generateReportBtn.addEventListener('click', generateSelectedReport);
+        }
+        
+        // Handle report type selection change
+        function handleReportTypeChange() {
+            const reportType = reportTypeSelect.value;
+            
+            // Show/hide unit selection based on report type
+            if (reportType.includes('unit')) {
+                unitSelectionDiv.style.display = 'block';
+            } else {
+                unitSelectionDiv.style.display = 'none';
+            }
+            
+            // Update period options based on report type
+            selectedPeriodSelect.innerHTML = '';
+            
+            if (reportType.includes('monthly')) {
+                months.forEach(month => {
+                    const option = document.createElement('option');
+                    option.value = month;
+                    option.textContent = month;
+                    selectedPeriodSelect.appendChild(option);
+                });
+                
+                // Set current month as default
+                const currentMonth = new Date().toLocaleString('en-US', { month: 'long' });
+                selectedPeriodSelect.value = currentMonth;
+            } else {
+                quarters.forEach(quarter => {
+                    const option = document.createElement('option');
+                    option.value = quarter;
+                    option.textContent = quarter;
+                    selectedPeriodSelect.appendChild(option);
+                });
+                
+                // Set current quarter as default
+                const currentMonthNum = new Date().getMonth();
+                const currentQuarter = Math.floor(currentMonthNum / 3) + 1;
+                selectedPeriodSelect.value = `Quarter ${currentQuarter}`;
+            }
+        }
+        
+        // Generate the selected report
+        function generateSelectedReport() {
+            const reportType = reportTypeSelect.value;
+            const period = selectedPeriodSelect.value;
+            
+            if (reportType.includes('unit')) {
+                const unit = selectedUnitSelect.value;
+                generateUnitReport(unit, period, reportType.includes('monthly') ? 'monthly' : 'quarterly');
+            } else {
+                generateDirectorateReport(period, reportType.includes('monthly') ? 'monthly' : 'quarterly');
+            }
+        }
+        
+        // Activate a specific tab
+        function activateTab(tabId) {
+            // Update tab buttons
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Update tab content
+            tabContents.forEach(content => {
+                if (content.id === tabId) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            // Special actions for specific tabs
+            if (tabId === 'view-reports') {
+                loadReportsTable();
+            }
+        }
+        
+        // Handle unit selection change
+        function handleUnitChange() {
+            const selectedUnit = unitSelect.value;
+            
+            // Clear project and sub-project
+            projectSelect.innerHTML = '<option value="">-- Select Project --</option>';
+            subProjectSelect.innerHTML = '<option value="">-- Select Sub-Project --</option>';
+            
+            // Populate projects based on unit
+            if (selectedUnit && projects[selectedUnit]) {
+                projects[selectedUnit].forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project;
+                    option.textContent = project;
+                    projectSelect.appendChild(option);
+                });
+            }
+        }
+        
+        // Handle project selection change
+        function handleProjectChange() {
+            const selectedProject = projectSelect.value;
+            
+            // Clear sub-project
+            subProjectSelect.innerHTML = '<option value="">-- Select Sub-Project --</option>';
+            
+            // Populate sub-projects based on project
+            if (selectedProject && subProjects[selectedProject]) {
+                subProjects[selectedProject].forEach(subProject => {
+                    const option = document.createElement('option');
+                    option.value = subProject;
+                    option.textContent = subProject;
+                    subProjectSelect.appendChild(option);
+                });
+            }
+        }
+        
+        // Handle form submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const reportingMonth = reportingMonthSelect.value;
+            const reportingQuarter = reportingQuarterSelect.value;
+            const unit = unitSelect.value;
+            const project = projectSelect.value;
+            const subProject = subProjectSelect.value;
+            const activity = document.getElementById('activity').value;
+            const participants = document.getElementById('participants').value;
+            const cost = document.getElementById('cost').value;
+            const impact = document.getElementById('impact').value;
+            
+            // Validate form
+            if (!reportingMonth || !reportingQuarter || !unit || !project || !subProject || !activity || !impact) {
+                showAlert('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            // Create report object
+            const report = {
+                id: Date.now(), // Simple ID generation
+                timestamp: new Date().toISOString(),
+                reportingMonth,
+                reportingQuarter,
+                unit,
+                project,
+                subProject,
+                activity,
+                participants: participants || 'Not specified',
+                cost: cost ? `ZAR ${parseFloat(cost).toLocaleString('en-ZA', {minimumFractionDigits: 2})}` : 'Not specified',
+                impact
+            };
+            
+            // Add to reports array
+            reports.push(report);
+            
+            // Save to localStorage
+            localStorage.setItem('automationReports', JSON.stringify(reports));
+            
+            // Show success message
+            showAlert('Report saved successfully!', 'success');
+            
+            // Clear form
+            clearForm();
+            
+            // If on view reports tab, refresh the table
+            if (document.getElementById('view-reports').classList.contains('active')) {
+                loadReportsTable();
+            }
+        }
+        
+        // Clear the form
+        function clearForm() {
+            reportForm.reset();
+            projectSelect.innerHTML = '<option value="">-- Select Project --</option>';
+            subProjectSelect.innerHTML = '<option value="">-- Select Sub-Project --</option>';
+            
+            // Reset to current month and quarter
+            const currentMonth = new Date().toLocaleString('en-US', { month: 'long' });
+            reportingMonthSelect.value = currentMonth;
+            
+            const currentMonthNum = new Date().getMonth();
+            const currentQuarter = Math.floor(currentMonthNum / 3) + 1;
+            reportingQuarterSelect.value = `Quarter ${currentQuarter}`;
+        }
+        
+        // Load reports into the table
+        function loadReportsTable() {
+            reportsBody.innerHTML = '';
+            
+            if (reports.length === 0) {
+                noReportsMessage.classList.remove('hidden');
+                return;
+            }
+            
+            noReportsMessage.classList.add('hidden');
+            
+            // Sort reports by date (newest first)
+            const sortedReports = [...reports].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            // Populate table
+            sortedReports.forEach(report => {
+                const row = document.createElement('tr');
+                const date = new Date(report.timestamp).toLocaleDateString();
+                
+                row.innerHTML = `
+                    <td>${date}</td>
+                    <td>${report.reportingMonth}</td>
+                    <td>${report.reportingQuarter}</td>
+                    <td>${report.unit}</td>
+                    <td>${report.project}</td>
+                    <td>${report.subProject}</td>
+                    <td>${report.activity.substring(0, 50)}${report.activity.length > 50 ? '...' : ''}</td>
+                    <td>${report.participants}</td>
+                    <td>${report.cost}</td>
+                    <td class="no-print">
+                        <button class="btn btn-warning view-report" data-id="${report.id}">View</button>
+                        <button class="btn btn-danger delete-report" data-id="${report.id}">Delete</button>
+                    </td>
+                `;
+                
+                reportsBody.appendChild(row);
+            });
+            
+            // Add event listeners to view and delete buttons
+            document.querySelectorAll('.view-report').forEach(btn => {
+                btn.addEventListener('click', () => viewReport(btn.getAttribute('data-id')));
+            });
+            
+            document.querySelectorAll('.delete-report').forEach(btn => {
+                btn.addEventListener('click', () => deleteReport(btn.getAttribute('data-id')));
+            });
+        }
+        
+        // View a specific report
+        function viewReport(id) {
+            const report = reports.find(r => r.id == id);
+            if (!report) return;
+            
+            const date = new Date(report.timestamp).toLocaleDateString();
+            
+            alert(`
+                Report Details:
+                
+                Date: ${date}
+                Reporting Month: ${report.reportingMonth}
+                Reporting Quarter: ${report.reportingQuarter}
+                Unit: ${report.unit}
+                Project: ${report.project}
+                Sub-Project: ${report.subProject}
+                Activity: ${report.activity}
+                Participants: ${report.participants}
+                Cost: ${report.cost}
+                Impact/Output: ${report.impact}
+            `);
+        }
+        
+        // Delete a specific report
+        function deleteReport(id) {
+            if (!confirm('Are you sure you want to delete this report?')) return;
+            
+            reports = reports.filter(r => r.id != id);
+            localStorage.setItem('automationReports', JSON.stringify(reports));
+            loadReportsTable();
+            showAlert('Report deleted successfully!', 'success');
+        }
+        
+        // Clear all reports
+        function clearAllReports() {
+            if (!confirm('Are you sure you want to delete ALL reports? This action cannot be undone.')) return;
+            
+            reports = [];
+            localStorage.setItem('automationReports', JSON.stringify(reports));
+            loadReportsTable();
+            showAlert('All reports have been deleted!', 'success');
+        }
+        
+        // Generate unit report
+        function generateUnitReport(unit, period, periodType) {
+            // Filter reports for the selected unit and period
+            let unitReports = reports.filter(report => report.unit === unit);
+            
+            if (periodType === 'monthly') {
+                unitReports = unitReports.filter(report => report.reportingMonth === period);
+            } else {
+                unitReports = unitReports.filter(report => report.reportingQuarter === period);
+            }
+            
+            if (unitReports.length === 0) {
+                showAlert(`No reports found for ${unit} in ${period}.`, 'error');
+                return;
+            }
+            
+            const reportHTML = generateUnitReportHTML(unit, unitReports, period, periodType);
+            
+            // Add to generated reports
+            const reportId = `unit-${unit.replace(/\s+/g, '-')}-${period.replace(/\s+/g, '-')}-${Date.now()}`;
+            currentGeneratedReports.unitReports.push({
+                id: reportId,
+                unit: unit,
+                period: period,
+                periodType: periodType,
+                html: reportHTML
+            });
+            
+            // Display in generated reports tab
+            displayGeneratedReports();
+            
+            // Switch to generated reports tab
+            activateTab('generated-reports');
+            
+            showAlert(`${periodType === 'monthly' ? 'Monthly' : 'Quarterly'} report for ${unit} generated successfully!`, 'success');
+        }
+        
+        // Generate directorate report
+        function generateDirectorateReport(period, periodType) {
+            // Filter reports for the selected period
+            let directorateReports = [...reports];
+            
+            if (periodType === 'monthly') {
+                directorateReports = directorateReports.filter(report => report.reportingMonth === period);
+            } else {
+                directorateReports = directorateReports.filter(report => report.reportingQuarter === period);
+            }
+            
+            if (directorateReports.length === 0) {
+                showAlert(`No reports found for the directorate in ${period}.`, 'error');
+                return;
+            }
+            
+            const reportHTML = generateDirectorateReportHTML(directorateReports, period, periodType);
+            
+            // Add to generated reports
+            const reportId = `directorate-${period.replace(/\s+/g, '-')}-${Date.now()}`;
+            currentGeneratedReports.directorateReport = {
+                id: reportId,
+                period: period,
+                periodType: periodType,
+                html: reportHTML
+            };
+            
+            // Display in generated reports tab
+            displayGeneratedReports();
+            
+            // Switch to generated reports tab
+            activateTab('generated-reports');
+            
+            showAlert(`${periodType === 'monthly' ? 'Monthly' : 'Quarterly'} directorate report generated successfully!`, 'success');
+        }
+        
+        // Display all generated reports
+        function displayGeneratedReports() {
+            unitReportsContainer.innerHTML = '';
+            directorateReportContainer.innerHTML = '';
+            
+            // Display unit reports
+            if (currentGeneratedReports.unitReports.length > 0) {
+                currentGeneratedReports.unitReports.forEach(report => {
+                    const reportElement = document.createElement('div');
+                    reportElement.className = 'report-section';
+                    reportElement.innerHTML = report.html;
+                    
+                    // Add export button
+                    const exportButton = document.createElement('button');
+                    exportButton.className = 'btn btn-success no-print';
+                    exportButton.textContent = 'Export to Word';
+                    exportButton.onclick = () => exportToWord(report.html, `${report.unit}-${report.period}-Report`);
+                    
+                    reportElement.appendChild(exportButton);
+                    unitReportsContainer.appendChild(reportElement);
+                });
+            }
+            
+            // Display directorate report
+            if (currentGeneratedReports.directorateReport) {
+                const report = currentGeneratedReports.directorateReport;
+                const reportElement = document.createElement('div');
+                reportElement.className = 'report-section';
+                reportElement.innerHTML = report.html;
+                
+                // Add export button
+                const exportButton = document.createElement('button');
+                exportButton.className = 'btn btn-success no-print';
+                exportButton.textContent = 'Export to Word';
+                exportButton.onclick = () => exportToWord(report.html, `Directorate-${report.period}-Report`);
+                
+                reportElement.appendChild(exportButton);
+                directorateReportContainer.appendChild(reportElement);
+            }
+        }
+        
+        // Generate HTML for a unit report
+        function generateUnitReportHTML(unit, unitReports, period, periodType) {
+            const totalActivities = unitReports.length;
+            const totalParticipants = unitReports.reduce((sum, report) => {
+                return sum + (report.participants !== 'Not specified' ? parseInt(report.participants) : 0);
+            }, 0);
+            
+            const totalCost = unitReports.reduce((sum, report) => {
+                if (report.cost !== 'Not specified') {
+                    const costValue = parseFloat(report.cost.replace('ZAR ', '').replace(/,/g, ''));
+                    return sum + (isNaN(costValue) ? 0 : costValue);
+                }
+                return sum;
+            }, 0);
+            
+            // Group by project
+            const projectsData = {};
+            unitReports.forEach(report => {
+                const project = report.project || 'General Activities';
+                if (!projectsData[project]) {
+                    projectsData[project] = [];
+                }
+                projectsData[project].push(report);
+            });
+            
+            let projectsHTML = '';
+            for (const [project, projectReports] of Object.entries(projectsData)) {
+                let projectActivitiesHTML = '';
+                projectReports.forEach(report => {
+                    projectActivitiesHTML += `
+                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                            <h4>${report.subProject || 'Activity'}</h4>
+                            <p><strong>Description:</strong> ${report.activity}</p>
+                            <p><strong>Participants:</strong> ${report.participants}</p>
+                            <p><strong>Cost:</strong> ${report.cost}</p>
+                            <p><strong>Impact/Output:</strong> ${report.impact}</p>
+                        </div>
+                    `;
+                });
+                
+                projectsHTML += `
+                    <div style="margin-bottom: 25px;">
+                        <h3>${project}</h3>
+                        ${projectActivitiesHTML}
+                    </div>
+                `;
+            }
+            
+            const periodLabel = periodType === 'monthly' ? `Month: ${period}` : `Quarter: ${period}`;
+            
+            return `
+                <h2>${unit} - ${periodType === 'monthly' ? 'Monthly' : 'Quarterly'} Activity Report</h2>
+                <p><strong>Reporting Period:</strong> ${periodLabel}</p>
+                <div class="stat-card">
+                    <h4>Executive Summary</h4>
+                    <p>This report summarizes the activities conducted by ${unit} during ${period}. 
+                    The unit conducted <strong>${totalActivities}</strong> activities with a total of 
+                    <strong>${totalParticipants}</strong> participants at a total cost of 
+                    <strong>ZAR ${totalCost.toLocaleString('en-ZA', {minimumFractionDigits: 2})}</strong>. 
+                    The activities spanned various projects and sub-projects, demonstrating comprehensive 
+                    engagement and impact across different initiatives.</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h4>Key Statistics</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div>
+                            <div class="stat-value">${totalActivities}</div>
+                            <div>Total Activities</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">${totalParticipants}</div>
+                            <div>Total Participants</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">ZAR ${totalCost.toLocaleString('en-ZA', {minimumFractionDigits: 2})}</div>
+                            <div>Total Cost</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">${totalActivities > 0 ? Math.round(totalParticipants / totalActivities) : 0}</div>
+                            <div>Avg. Participants per Activity</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">${Object.keys(projectsData).length}</div>
+                            <div>Projects</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Detailed Activities</h3>
+                ${projectsHTML}
+            `;
+        }
+        
+        // Generate HTML for directorate report
+        function generateDirectorateReportHTML(directorateReports, period, periodType) {
+            const totalActivities = directorateReports.length;
+            const totalParticipants = directorateReports.reduce((sum, report) => {
+                return sum + (report.participants !== 'Not specified' ? parseInt(report.participants) : 0);
+            }, 0);
+            
+            const totalCost = directorateReports.reduce((sum, report) => {
+                if (report.cost !== 'Not specified') {
+                    const costValue = parseFloat(report.cost.replace('ZAR ', '').replace(/,/g, ''));
+                    return sum + (isNaN(costValue) ? 0 : costValue);
+                }
+                return sum;
+            }, 0);
+            
+            // Group by unit
+            const unitsData = {};
+            directorateReports.forEach(report => {
+                if (!unitsData[report.unit]) {
+                    unitsData[report.unit] = { activities: 0, participants: 0, cost: 0 };
+                }
+                unitsData[report.unit].activities += 1;
+                if (report.participants !== 'Not specified') {
+                    unitsData[report.unit].participants += parseInt(report.participants);
+                }
+                if (report.cost !== 'Not specified') {
+                    const costValue = parseFloat(report.cost.replace('ZAR ', '').replace(/,/g, ''));
+                    unitsData[report.unit].cost += isNaN(costValue) ? 0 : costValue;
+                }
+            });
+            
+            let unitsTableHTML = '';
+            for (const [unit, data] of Object.entries(unitsData)) {
+                unitsTableHTML += `
+                    <tr>
+                        <td>${unit}</td>
+                        <td>${data.activities}</td>
+                        <td>${data.participants}</td>
+                        <td>ZAR ${data.cost.toLocaleString('en-ZA', {minimumFractionDigits: 2})}</td>
+                    </tr>
+                `;
+            }
+            
+            const periodLabel = periodType === 'monthly' ? `Month: ${period}` : `Quarter: ${period}`;
+            
+            return `
+                <h2>Directorate ${periodType === 'monthly' ? 'Monthly' : 'Quarterly'} Summary Report</h2>
+                <p><strong>Reporting Period:</strong> ${periodLabel}</p>
+                <div class="stat-card">
+                    <h4>Executive Summary</h4>
+                    <p>This comprehensive report provides an overview of all activities conducted across the directorate during ${period}. 
+                    The directorate successfully conducted <strong>${totalActivities}</strong> activities engaging 
+                    <strong>${totalParticipants}</strong> participants at a total cost of 
+                    <strong>ZAR ${totalCost.toLocaleString('en-ZA', {minimumFractionDigits: 2})}</strong>. 
+                    This demonstrates significant outreach and impact across various initiatives and programs.</p>
+                </div>
+                
+                <h3>Unit-wise Performance Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Unit</th>
+                            <th>Number of Activities</th>
+                            <th>Total Participants</th>
+                            <th>Total Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${unitsTableHTML}
+                    </tbody>
+                </table>
+                
+                <h3>Key Achievements and Impacts</h3>
+                ${Object.keys(unitsData).map(unit => `
+                    <div style="margin-bottom: 20px;">
+                        <h4>${unit}</h4>
+                        <ul>
+                            ${directorateReports
+                                .filter(r => r.unit === unit)
+                                .slice(0, 3)
+                                .map(report => `<li>${report.subProject || 'Activity'}: ${report.impact.substring(0, 100)}...</li>`)
+                                .join('')}
+                        </ul>
+                    </div>
+                `).join('')}
+                
+                <h3>Recommendations and Way Forward</h3>
+                <ul>
+                    <li>Continue to strengthen cross-unit collaboration for enhanced impact</li>
+                    <li>Explore digital platforms for wider participant engagement</li>
+                    <li>Develop standardized metrics for impact assessment across all units</li>
+                    <li>Enhance stakeholder engagement and partnership development</li>
+                    <li>Focus on sustainable and scalable program models</li>
+                    <li>Optimize resource allocation based on impact analysis</li>
+                </ul>
+            `;
+        }
+        
+        // Export HTML content to Word document
+        function exportToWord(html, filename) {
+            // Create a Blob with the HTML content
+            const blob = new Blob([`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                        h1, h2, h3, h4 { color: #2c3e50; }
+                        h1 { font-size: 24px; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+                        h2 { font-size: 20px; margin-top: 25px; }
+                        h3 { font-size: 18px; margin-top: 20px; }
+                        h4 { font-size: 16px; margin-top: 15px; }
+                        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+                        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+                        th { background-color: #f2f2f2; font-weight: bold; }
+                        .stat-card { background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 15px 0; }
+                        .stat-value { font-size: 24px; font-weight: bold; color: #3498db; }
+                    </style>
+                </head>
+                <body>
+                    ${html}
+                </body>
+                </html>
+            `], { type: 'application/msword' });
+            
+            // Create a temporary URL for the Blob
+            const url = URL.createObjectURL(blob);
+            
+            // Create a temporary link element to trigger the download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${filename}.doc`;
+            document.body.appendChild(a);
+            a.click();
+            
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }
+        
+        // Show alert message
+        function showAlert(message, type) {
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
